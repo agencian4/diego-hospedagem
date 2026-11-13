@@ -1,0 +1,36 @@
+---
+const itens = [
+  { n: '5,0', t: 'Flat 203 no Airbnb, com o selo Preferido dos hóspedes' },
+  { n: '4,9', t: 'nota de localização do Flat 204, em 14 avaliações' },
+  { n: '1 h', t: 'tempo de resposta informado pelo Airbnb' },
+  { n: '4', t: 'destinos de transfer, com saída de São Luís' },
+];
+---
+<div class="wrap">
+  <ul class="prova" aria-label="Números dos flats">
+    {itens.map((i) => (
+      <li>
+        <span class="num serif n">{i.n}</span>
+        <span class="t">{i.t}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .n { white-space: nowrap; }
+  .prova { display: flex; flex-wrap: wrap; border-top: 1.5px solid var(--linha-forte); border-bottom: 1px solid var(--linha); }
+  li { flex: 1 1 240px; padding: 22px 24px; display: flex; gap: 14px; align-items: baseline; border-left: 1px solid var(--linha); }
+  li:first-child { border-left: 0; padding-left: 0; }
+  .n { font-size: 44px; line-height: 1; }
+  .t { font: 500 14px/1.4 var(--sans); color: var(--texto); }
+  @media (max-width: 600px) {
+    li { flex: 1 1 50%; padding: 16px 12px; border-left: 0; border-top: 1px solid var(--linha); }
+    li:nth-child(-n + 2) { border-top: 0; }
+    li:nth-child(odd) { padding-left: 0; }
+    li:nth-child(even) { border-left: 1px solid var(--linha); }
+    li { flex-direction: column; gap: 6px; }
+    .n { font-size: 34px; }
+    .t { font-size: 12.5px; }
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import { depoimentos, flats } from '../data/site';
+const { principal, outros } = depoimentos;
+---
+<section class="wrap dep" aria-labelledby="dep-titulo">
+  <h2 id="dep-titulo" class="h2">Quem ficou, conta assim.</h2>
+  <div class="grade">
+    <figure class="principal">
+      <blockquote><p>“{principal.texto}”</p></blockquote>
+      <figcaption>{principal.autor} · {principal.flat} · {principal.quando}</figcaption>
+    </figure>
+    <div class="outros">
+      {outros.map((d) => (
+        <figure>
+          <blockquote><p>“{d.texto}”</p></blockquote>
+          <figcaption>{d.autor} · {d.flat} · {d.quando}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+  <p class="links">
+    Avaliações publicadas no Airbnb.{' '}
+    <a href={flats[0].airbnb} target="_blank" rel="noopener" data-evento="clique_airbnb" data-local="avaliacoes-203">Ler todas as do 203</a>{' · '}
+    <a href={flats[1].airbnb} target="_blank" rel="noopener" data-evento="clique_airbnb" data-local="avaliacoes-204">e as do 204</a>
+  </p>
+</section>
+
+<style>
+  .dep { padding-block: var(--secao); }
+  .grade { display: flex; flex-wrap: wrap; gap: 48px; margin-top: 64px; }
+  .principal { flex: 1.4 1 520px; }
+  .principal p { font: 400 clamp(32px, 3.6vw, 52px)/1.1 var(--serif); text-wrap: balance; }
+  figcaption { margin-top: 14px; font: 500 14px/1.4 var(--sans); color: var(--suave); }
+  .outros { flex: 1 1 360px; display: flex; flex-direction: column; gap: 36px; border-left: 1px solid var(--linha); padding-left: 40px; }
+  .outros p { font: 400 24px/1.3 var(--serif); }
+  .links { margin-top: 56px; font: 500 15px/1.5 var(--sans); color: var(--suave); }
+  @media (max-width: 700px) {
+    .grade { margin-top: 40px; gap: 36px; }
+    .outros { border-left: 0; padding-left: 0; border-top: 1px solid var(--linha); padding-top: 32px; }
+  }
+</style>

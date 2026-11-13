@@ -1,0 +1,69 @@
+---
+import { wa, mensagens } from '../data/site';
+const links = [
+  { href: '#orla', rotulo: 'A orla' },
+  { href: '#flats', rotulo: 'Os flats' },
+  { href: '#transfer', rotulo: 'Transfer Lençóis' },
+  { href: '#perguntas', rotulo: 'Perguntas' },
+];
+---
+<header class="cab">
+  <div class="wrap cab-in">
+    <a href="#topo" class="marca" aria-label="Diego's Hospedagens, início">
+      <span class="marca-nome">Diego's</span>
+      <span class="marca-sub">Hospedagens · São Luís, MA</span>
+    </a>
+
+    <nav aria-label="Principal" class="nav-desk">
+      {links.map((l) => <a href={l.href}>{l.rotulo}</a>)}
+      <a class="btn btn-p btn-sm" href={wa(mensagens.geral)} target="_blank" rel="noopener" data-evento="clique_whatsapp" data-local="cabecalho">WhatsApp</a>
+    </nav>
+
+    <details class="nav-mob">
+      <summary aria-label="Abrir menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h16M4 16h16" /></svg>
+      </summary>
+      <nav aria-label="Principal (celular)" class="painel">
+        {links.map((l) => <a href={l.href}>{l.rotulo}</a>)}
+        <a class="btn btn-p" href={wa(mensagens.geral)} target="_blank" rel="noopener" data-evento="clique_whatsapp" data-local="menu">Consultar datas no WhatsApp</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Fecha o menu do celular ao escolher uma seção.
+  document.querySelectorAll<HTMLAnchorElement>('.nav-mob .painel a[href^="#"]').forEach((a) =>
+    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open')),
+  );
+</script>
+
+<style>
+  .cab { border-bottom: 1px solid rgba(29, 47, 111, 0.18); position: relative; z-index: 20; background: var(--cal); }
+  .cab-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
+  .marca { display: flex; align-items: baseline; gap: 12px; text-decoration: none; color: var(--anil); }
+  .marca:hover { color: var(--anil); }
+  .marca-nome { font: 400 30px/1 var(--serif); }
+  .marca-sub { font: 500 13px/1.2 var(--sans); color: var(--suave); }
+  .nav-desk { display: flex; align-items: center; gap: 28px; font: 500 15px/1 var(--sans); }
+  .nav-desk > a:not(.btn) { text-decoration: none; padding-block: 12px; }
+  .btn-sm { min-height: 44px; padding: 0 18px; font-size: 15px; }
+  .nav-mob { display: none; position: relative; }
+  .nav-mob summary {
+    list-style: none; width: 44px; height: 44px; display: grid; place-items: center;
+    border: 1.5px solid var(--anil); border-radius: 2px; cursor: pointer;
+  }
+  .nav-mob summary::-webkit-details-marker { display: none; }
+  .painel {
+    position: absolute; right: 0; top: 54px; width: min(86vw, 320px);
+    background: var(--cal); border: 1.5px solid var(--anil); padding: 8px 20px 20px;
+    display: flex; flex-direction: column;
+  }
+  .painel > a:not(.btn) { padding: 14px 0; border-bottom: 1px solid var(--linha); text-decoration: none; font: 500 17px/1.2 var(--sans); }
+  .painel .btn { margin-top: 18px; }
+  @media (max-width: 900px) {
+    .nav-desk { display: none; }
+    .nav-mob { display: block; }
+    .marca-sub { display: none; }
+  }
+</style>

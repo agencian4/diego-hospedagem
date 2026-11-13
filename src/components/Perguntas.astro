@@ -1,0 +1,38 @@
+---
+import { perguntas } from '../data/site';
+const visiveis = perguntas.filter((q) => !q.pendente);
+---
+<section id="perguntas" class="wrap perg" aria-labelledby="perg-titulo">
+  <div class="esq">
+    <h2 id="perg-titulo" class="h2">Perguntas francas.</h2>
+    <p class="lead">O que os hóspedes perguntam antes de reservar, respondido sem rodeio.</p>
+  </div>
+  <div class="lista">
+    {visiveis.map((q, i) => (
+      <details open={i === 0}>
+        <summary>{q.p}<span class="sinal" aria-hidden="true"></span></summary>
+        <p>{q.r}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .perg { display: flex; flex-wrap: wrap; gap: 48px 64px; padding-block: var(--secao); }
+  .esq { flex: 1 1 320px; display: flex; flex-direction: column; gap: 24px; }
+  .esq .lead { max-width: 360px; }
+  .lista { flex: 2 1 600px; min-width: 0; border-top: 1.5px solid var(--linha-forte); }
+  details { border-bottom: 1px solid var(--linha); }
+  summary {
+    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px;
+    padding: 24px 0; font: 600 20px/1.35 var(--sans);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { color: var(--telha); }
+  .sinal { position: relative; width: 16px; height: 16px; flex: none; }
+  .sinal::before, .sinal::after { content: ''; position: absolute; left: 0; top: 7px; width: 16px; height: 2px; background: currentColor; transition: transform .2s ease; }
+  .sinal::after { transform: rotate(90deg); }
+  details[open] .sinal::after { transform: rotate(0deg); }
+  details p { padding-bottom: 24px; margin-top: -8px; font-size: 16px; line-height: 1.6; color: var(--texto); max-width: 620px; }
+  @media (max-width: 600px) { summary { font-size: 18px; padding: 20px 0; } }
+</style>

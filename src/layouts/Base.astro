@@ -1,0 +1,121 @@
+---
+import '../styles/global.css';
+import gloock from '@fontsource/gloock/files/gloock-latin-400-normal.woff2?url';
+import { contato, flats, perguntas } from '../data/site';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+}
+
+const { titulo, descricao } = Astro.props;
+const site = Astro.site ?? new URL('https://airbnb-diego.vercel.app');
+const canonica = new URL(Astro.url.pathname, site).href;
+const og = new URL('/og.jpg', site).href;
+const gaId = import.meta.env.PUBLIC_GA_ID;
+const pixelId = import.meta.env.PUBLIC_META_PIXEL_ID;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'LodgingBusiness',
+      '@id': `${site.href}#hospedagem`,
+      name: contato.marca,
+      url: site.href,
+      image: og,
+      telephone: `+${contato.whatsapp}`,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Avenida Litorânea',
+        addressLocality: 'São Luís',
+        addressRegion: 'MA',
+        addressCountry: 'BR',
+      },
+      petsAllowed: true,
+      amenityFeature: ['Piscina', 'Estacionamento gratuito', 'Wi-Fi', 'Cozinha completa', 'Self check-in'].map((n) => ({
+        '@type': 'LocationFeatureSpecification',
+        name: n,
+        value: true,
+      })),
+      containsPlace: flats.map((f) => ({
+        '@type': 'Apartment',
+        name: `Flat ${f.id}`,
+        url: `${site.href}#${f.slug}`,
+        occupancy: { '@type': 'QuantitativeValue', maxValue: f.id === '203' ? 8 : 7 },
+        numberOfRooms: f.id === '203' ? 2 : 1,
+        numberOfBathroomsTotal: f.id === '203' ? 2 : 1,
+      })),
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: perguntas
+        .filter((q) => !q.pendente)
+        .map((q) => ({ '@type': 'Question', name: q.p, acceptedAnswer: { '@type': 'Answer', text: q.r } })),
+    },
+  ],
+};
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonica} />
+    <meta name="theme-color" content="#1d2f6f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={gloock} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={contato.marca} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={og} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Varanda de um dos flats com o mar da Avenida Litorânea ao fundo" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    {gaId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </>
+    )}
+    {pixelId && (
+      <script is:inline define:vars={{ pixelId }}>
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', pixelId); fbq('track', 'PageView');
+      </script>
+    )}
+  </head>
+  <body>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+    <slot />
+    <script>
+      // Eventos de conversão: cada link com data-evento envia um evento ao GA4 e ao Meta Pixel, se configurados.
+      document.addEventListener('click', (e) => {
+        const alvo = (e.target as HTMLElement).closest<HTMLElement>('[data-evento]');
+        if (!alvo) return;
+        const evento = alvo.dataset.evento!;
+        const local = alvo.dataset.local ?? '';
+        const w = window as any;
+        w.dataLayer?.push({ event: evento, local });
+        if (typeof w.gtag === 'function') w.gtag('event', evento, { local });
+        if (typeof w.fbq === 'function') w.fbq('track', evento === 'clique_whatsapp' ? 'Contact' : 'ViewContent', { local });
+      });
+    </script>
+  </body>
+</html>

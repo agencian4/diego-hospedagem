@@ -1,0 +1,151 @@
+---
+import Foto from './Foto.astro';
+import { flats, nosDois, wa } from '../data/site';
+---
+<section id="flats" class="flats" aria-labelledby="flats-titulo">
+  <div class="wrap">
+    <div class="topo">
+      <h2 id="flats-titulo" class="h2">Dois flats, dois jeitos de ficar.</h2>
+      <p class="lead">No mesmo condomínio, de frente para a orla. O 203 acomoda a família inteira com privacidade; o 204 é o da varanda e das redes.</p>
+    </div>
+
+    <div class="cards">
+      {flats.map((f, i) => (
+        <article id={f.slug} class:list={['card', { largo: i === 0 }]} aria-labelledby={`${f.slug}-titulo`}>
+          <button type="button" class="capa foto" data-abrir={`galeria-${f.id}`} aria-label={`Ver as ${f.galeria.length} fotos do Flat ${f.id}`}>
+            <Foto nome={f.capa} alt={f.capaAlt} sizes="(max-width: 900px) 100vw, 50vw" />
+            {f.selo && <span class="selo">{f.selo}</span>}
+            <span class="ver-fotos">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></svg>
+              {f.galeria.length} fotos
+            </span>
+          </button>
+          <div class="corpo">
+            <div class="cabeca">
+              <div>
+                <span class="numero num serif" aria-hidden="true">{f.id}</span>
+                <h3 id={`${f.slug}-titulo`}><span class="sr-only">Flat {f.id}: </span>{f.titulo}</h3>
+              </div>
+              <p class="nota"><span class="num serif">{f.nota}</span><br /><span>{f.avaliacoes} avaliações no Airbnb</span></p>
+            </div>
+            <dl class="specs num">
+              {f.specs.map((s) => (
+                <div><dt>{s.rotulo}</dt><dd class="serif">{s.valor}</dd></div>
+              ))}
+            </dl>
+            <p class="desc">{f.descricao}</p>
+            <blockquote>
+              <p>“{f.citacao.texto}”</p>
+              <footer>{f.citacao.autor}, hóspede em {f.citacao.quando}</footer>
+            </blockquote>
+            <div class="acoes">
+              <a class="btn btn-p" href={wa(f.mensagem)} target="_blank" rel="noopener" data-evento="clique_whatsapp" data-local={`flat-${f.id}`}>Consultar o {f.id}</a>
+              <a class="btn btn-g" href={f.airbnb} target="_blank" rel="noopener" data-evento="clique_airbnb" data-local={`flat-${f.id}`}>Reservar no Airbnb</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="nos-dois">
+      <p class="serif">Nos dois flats</p>
+      <ul>
+        {nosDois.map((n) => <li>{n}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{flats.map((f) => (
+  <dialog id={`galeria-${f.id}`} class="galeria" aria-labelledby={`galeria-${f.id}-titulo`}>
+    <div class="g-topo">
+      <p id={`galeria-${f.id}-titulo`} class="serif">Flat {f.id} <span>· {f.galeria.length} fotos</span></p>
+      <div class="g-acoes">
+        <a class="btn btn-p btn-sm" href={wa(f.mensagem)} target="_blank" rel="noopener" data-evento="clique_whatsapp" data-local={`galeria-${f.id}`}>Consultar o {f.id}</a>
+        <button type="button" class="fechar" data-fechar aria-label="Fechar galeria">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+    </div>
+    <ul class="g-grade">
+      {f.galeria.map((g) => (
+        <li class="foto"><Foto nome={g.arquivo} alt={g.alt} sizes="(max-width: 700px) 100vw, 50vw" larguras={[480, 800, 1200]} /></li>
+      ))}
+    </ul>
+  </dialog>
+))}
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-abrir]').forEach((b) => {
+    b.addEventListener('click', () => {
+      const d = document.getElementById(b.dataset.abrir!) as HTMLDialogElement | null;
+      d?.showModal();
+      (window as any).gtag?.('event', 'abrir_galeria', { local: b.dataset.abrir });
+    });
+  });
+  document.querySelectorAll<HTMLDialogElement>('dialog.galeria').forEach((d) => {
+    d.querySelector('[data-fechar]')?.addEventListener('click', () => d.close());
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  });
+</script>
+
+<style>
+  .flats { background: var(--areia); padding-block: var(--secao); }
+  .topo { display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: flex-end; justify-content: space-between; }
+  .topo .h2 { flex: 1 1 560px; max-width: 760px; }
+  .topo .lead { flex: 1 1 360px; max-width: 420px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 64px; align-items: stretch; }
+  .card { flex: 1 1 440px; min-width: 0; background: var(--cal); display: flex; flex-direction: column; scroll-margin-top: 24px; }
+  .card.largo { flex: 1.25 1 520px; }
+  .capa { display: block; width: 100%; height: 400px; padding: 0; border: 0; cursor: zoom-in; }
+  .capa :global(img) { transition: transform .5s ease; }
+  .capa:hover :global(img) { transform: scale(1.025); }
+  .selo { position: absolute; top: 18px; left: 18px; background: var(--anil); color: var(--cal); font: 600 13px/1 var(--sans); padding: 9px 12px; }
+  .ver-fotos { position: absolute; right: 16px; bottom: 16px; display: inline-flex; gap: 8px; align-items: center; background: var(--cal); color: var(--anil); font: 600 14px/1 var(--sans); padding: 10px 14px; }
+  .corpo { padding: 36px 40px 40px; display: flex; flex-direction: column; gap: 26px; flex: 1; }
+  .cabeca { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .cabeca > div { min-width: 0; }
+  .nota { flex: none; }
+  .numero { display: block; font-size: 112px; line-height: 0.8; }
+  h3 { margin-top: 16px; font: 600 22px/1.25 var(--sans); max-width: 320px; text-wrap: balance; }
+  .nota { text-align: right; font: 500 13px/1.4 var(--sans); color: var(--suave); }
+  .nota .serif { font-size: 40px; line-height: 1; color: var(--anil); }
+  .specs { display: flex; flex-wrap: wrap; border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
+  .specs div { flex: 1 1 100px; padding: 14px 0; }
+  dt { font: 500 13px/1 var(--sans); color: var(--suave); }
+  dd { margin: 8px 0 0; font-size: 30px; line-height: 1; }
+  .desc { font-size: 16px; line-height: 1.6; color: var(--texto); }
+  blockquote { padding-left: 18px; border-left: 2px solid var(--telha); }
+  blockquote p { font: 400 21px/1.35 var(--serif); }
+  blockquote footer { margin-top: 8px; font: 500 13px/1.3 var(--sans); color: var(--suave); }
+  .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; }
+  .nos-dois { margin-top: 56px; display: flex; flex-wrap: wrap; border-top: 1.5px solid var(--linha-forte); }
+  .nos-dois > p { flex: 1 1 220px; padding: 22px 24px 0 0; font-size: 26px; line-height: 1.15; }
+  .nos-dois ul { flex: 4 1 700px; padding-top: 22px; display: flex; flex-wrap: wrap; gap: 14px 0; font: 500 16px/1.4 var(--sans); }
+  .nos-dois li { flex: 1 1 33%; min-width: 220px; }
+
+  .galeria { width: min(1200px, 100vw); max-width: 100vw; height: min(92vh, 100dvh); max-height: 100dvh; padding: 0; border: 0; background: var(--cal); color: var(--anil); overflow: auto; }
+  .galeria::backdrop { background: rgba(15, 22, 52, 0.72); }
+  .g-topo { position: sticky; top: 0; z-index: 2; background: var(--cal); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--linha); }
+  .g-topo p { font-size: 28px; line-height: 1; }
+  .g-topo span { font: 500 15px/1 var(--sans); color: var(--suave); }
+  .g-acoes { display: flex; gap: 10px; align-items: center; }
+  .btn-sm { min-height: 44px; padding: 0 18px; font-size: 15px; }
+  .fechar { width: 44px; height: 44px; display: grid; place-items: center; border: 1.5px solid var(--anil); background: transparent; color: var(--anil); border-radius: 2px; cursor: pointer; }
+  .g-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 8px; }
+  .g-grade li { aspect-ratio: 4 / 3; }
+  .g-grade li:first-child { grid-column: span 2; aspect-ratio: 16 / 9; }
+
+  @media (max-width: 700px) {
+    .cards { margin-top: 40px; gap: 16px; margin-inline: calc(var(--margem) * -1); }
+    .capa { height: 280px; }
+    .corpo { padding: 26px 20px 28px; gap: 20px; }
+    .numero { font-size: 84px; }
+    .specs div { flex: 1 1 45%; }
+    .acoes .btn { flex: 1 1 100%; }
+    .g-grade { grid-template-columns: 1fr; }
+    .g-grade li:first-child { grid-column: auto; aspect-ratio: 4 / 3; }
+    .g-topo .btn-sm { display: none; }
+    .galeria { height: 100dvh; }
+  }
+</style>

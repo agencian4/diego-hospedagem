@@ -1,0 +1,118 @@
+@import '@fontsource/gloock/latin-400.css';
+@import '@fontsource/schibsted-grotesk/latin-400.css';
+@import '@fontsource/schibsted-grotesk/latin-500.css';
+@import '@fontsource/schibsted-grotesk/latin-600.css';
+
+/* Fallbacks com métricas aproximadas para reduzir o salto de layout enquanto as fontes carregam */
+@font-face {
+  font-family: 'Gloock Fallback';
+  src: local('Georgia'), local('Times New Roman');
+  size-adjust: 104%;
+  ascent-override: 92%;
+}
+@font-face {
+  font-family: 'Schibsted Fallback';
+  src: local('Arial'), local('Helvetica');
+  size-adjust: 98%;
+}
+
+:root {
+  --anil: #1d2f6f;
+  --anil-claro: #2a3a78;
+  --cal: #f3efe6;
+  --areia: #e7decb;
+  --telha: #a9471f;
+  --telha-claro: #e9c9a8;
+  --texto: #3a4166;
+  --suave: #4a5170;
+  --linha: rgba(29, 47, 111, 0.25);
+  --linha-forte: #1d2f6f;
+  --sobre-anil: #d9dceb;
+  --sobre-anil-suave: #c9cee3;
+
+  --serif: 'Gloock', 'Gloock Fallback', Georgia, serif;
+  --sans: 'Schibsted Grotesk', 'Schibsted Fallback', system-ui, sans-serif;
+
+  --margem: clamp(20px, 4vw, 60px);
+  --largura: 1320px;
+  --secao: clamp(72px, 9vw, 120px);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--cal);
+  color: var(--anil);
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+a { color: var(--anil); text-underline-offset: 4px; text-decoration-thickness: 1px; }
+a:hover { color: var(--telha); }
+
+:focus-visible { outline: 2px solid var(--telha); outline-offset: 3px; }
+
+h1, h2, h3, p, ol, ul, dl, dd, figure, blockquote { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+
+.wrap { max-width: var(--largura); margin-inline: auto; padding-inline: var(--margem); }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+.serif { font-family: var(--serif); font-weight: 400; }
+
+.h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(40px, 5.2vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--anil);
+  text-wrap: balance;
+}
+.lead { font-size: 18px; line-height: 1.6; color: var(--texto); text-wrap: pretty; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.pular {
+  position: absolute; left: 12px; top: -60px; z-index: 100;
+  background: var(--anil); color: var(--cal); padding: 12px 16px; font-weight: 600;
+}
+.pular:focus { top: 12px; color: var(--cal); }
+
+/* Botões */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 26px;
+  font: 600 16px/1.1 var(--sans);
+  text-decoration: none; border-radius: 2px; border: 1.5px solid transparent;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+  cursor: pointer;
+}
+.btn svg { transition: transform .2s ease; }
+.btn:hover svg { transform: translateX(3px); }
+.btn-p { background: var(--anil); color: var(--cal); }
+.btn-p:hover { background: var(--telha); color: var(--cal); }
+.btn-g { color: var(--anil); border-color: var(--anil); background: transparent; }
+.btn-g:hover { color: var(--telha); border-color: var(--telha); }
+.btn-l { background: var(--cal); color: var(--anil); }
+.btn-l:hover { background: var(--telha-claro); color: var(--anil); }
+
+/* Fotos */
+.foto { position: relative; overflow: hidden; background: var(--areia); }
+.foto img { width: 100%; height: 100%; object-fit: cover; }

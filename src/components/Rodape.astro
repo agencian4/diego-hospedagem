@@ -1,0 +1,32 @@
+---
+import { contato, wa, mensagens } from '../data/site';
+const ano = new Date().getFullYear();
+---
+<footer class="rod">
+  <div class="wrap">
+    <div class="cta">
+      <p class="serif">Diga as datas.<br />A gente responde.</p>
+      <a class="btn btn-l grande" href={wa(mensagens.geral)} target="_blank" rel="noopener" data-evento="clique_whatsapp" data-local="rodape">Chamar no WhatsApp</a>
+    </div>
+    <div class="base">
+      <span><span class="serif marca">Diego's</span> Hospedagens · {contato.endereco}</span>
+      <a href={wa(mensagens.geral)} target="_blank" rel="noopener" data-evento="clique_whatsapp" data-local="rodape-numero">WhatsApp {contato.whatsappExibicao}</a>
+      <span>© {ano} {contato.marca}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .rod { background: var(--telha); color: var(--cal); padding-top: var(--secao); padding-bottom: 48px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-end; justify-content: space-between; }
+  .cta p { flex: 1 1 640px; font-size: clamp(48px, 6.6vw, 100px); line-height: 0.95; letter-spacing: -0.015em; }
+  .grande { min-height: 60px; font-size: 17px; }
+  .base { display: flex; flex-wrap: wrap; gap: 16px 24px; justify-content: space-between; margin-top: 96px; padding-top: 24px; border-top: 1px solid rgba(243, 239, 230, 0.4); font: 500 14px/1.5 var(--sans); }
+  .base a { color: var(--cal); display: inline-flex; align-items: center; min-height: 44px; }
+  .base a:hover { color: var(--telha-claro); }
+  .marca { font-size: 22px; line-height: 1; margin-right: 4px; }
+  @media (max-width: 600px) {
+    .grande { width: 100%; }
+    .base { margin-top: 64px; flex-direction: column; padding-bottom: 72px; }
+  }
+</style>

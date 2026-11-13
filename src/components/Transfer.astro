@@ -1,0 +1,50 @@
+---
+import { transfer, wa, mensagens } from '../data/site';
+---
+<section id="transfer" class="transfer" aria-labelledby="transfer-titulo">
+  <div class="wrap in">
+    <div class="esq">
+      <h2 id="transfer-titulo">Da varanda às dunas, com o carro já reservado.</h2>
+      <p>O transfer particular sai de São Luís para os Lençóis Maranhenses e outros pontos do litoral. Você fecha a hospedagem e a viagem na mesma conversa, sem procurar van, rodoviária ou horário de ônibus.</p>
+      <a class="btn btn-l" href={wa(mensagens.transfer)} target="_blank" rel="noopener" data-evento="clique_whatsapp" data-local="transfer">Montar estadia + transfer</a>
+    </div>
+    <div class="dir">
+      <p class="cond" id="transfer-cond">Saída de São Luís · valor por veículo · até 4 pessoas</p>
+      <ol class="num" aria-describedby="transfer-cond">
+        {transfer.map((t, i) => (
+          <li>
+            <span class="idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="dest"><strong class="serif">{t.destino}</strong><span>{t.nota}</span></span>
+            <span class="valor serif">{t.valor}</span>
+          </li>
+        ))}
+      </ol>
+      <p class="rodape">Valores da tabela atual do Transfer B10, por veículo.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .transfer { background: var(--anil); color: var(--cal); padding-block: var(--secao); }
+  .in { display: flex; flex-wrap: wrap; gap: 64px; }
+  .esq { flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 28px; align-items: flex-start; }
+  h2 { font: 400 clamp(44px, 5.6vw, 84px)/0.98 var(--serif); letter-spacing: -0.01em; text-wrap: balance; }
+  .esq p { color: var(--sobre-anil); max-width: 460px; }
+  .dir { flex: 1.2 1 520px; min-width: 0; }
+  .cond { font: 500 14px/1.4 var(--sans); color: var(--sobre-anil-suave); margin-bottom: 6px; }
+  ol { border-top: 1.5px solid var(--cal); }
+  li { display: flex; align-items: baseline; gap: 20px; padding: 26px 0; border-bottom: 1px solid rgba(243, 239, 230, 0.25); }
+  .idx { font: 500 13px/1 var(--sans); color: var(--sobre-anil-suave); width: 28px; flex: none; }
+  .dest { flex: 1; display: flex; flex-direction: column; }
+  .dest strong { font-size: 34px; line-height: 1.05; }
+  .dest span { font: 400 15px/1.5 var(--sans); color: var(--sobre-anil); }
+  .valor { font-size: 34px; line-height: 1; white-space: nowrap; }
+  .rodape { margin-top: 18px; font: 400 14px/1.5 var(--sans); color: var(--sobre-anil-suave); }
+  @media (max-width: 600px) {
+    .in { gap: 40px; }
+    .esq .btn { width: 100%; }
+    li { gap: 12px; padding: 20px 0; }
+    .idx { display: none; }
+    .dest strong, .valor { font-size: 26px; }
+  }
+</style>

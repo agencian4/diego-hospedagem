@@ -1,0 +1,32 @@
+---
+const passos = [
+  { t: 'Mande datas e número de hóspedes', d: 'Pelo WhatsApp. Se for aos Lençóis, diga também o destino.' },
+  { t: 'Receba o valor fechado', d: 'Hospedagem e transfer na mesma resposta, para decidir de uma vez.' },
+  { t: 'Chegue no seu horário', d: 'O check-in é autônomo, com cofre de chaves.' },
+];
+---
+<section class="reservar" aria-labelledby="res-titulo">
+  <div class="wrap in">
+    <h2 id="res-titulo" class="serif">Reservar leva uma conversa.</h2>
+    <ol>
+      {passos.map((p, i) => (
+        <li>
+          <span class="num serif n" aria-hidden="true">{i + 1}</span>
+          <strong>{p.t}</strong>
+          <span class="d">{p.d}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .reservar { border-block: 1px solid rgba(29, 47, 111, 0.18); }
+  .in { display: flex; flex-wrap: wrap; gap: 40px; padding-block: 72px; }
+  h2 { flex: 1 1 280px; font-size: 40px; line-height: 1.05; }
+  ol { flex: 3 1 720px; display: flex; flex-wrap: wrap; gap: 32px; }
+  li { flex: 1 1 200px; display: flex; flex-direction: column; gap: 10px; }
+  .n { font-size: 48px; line-height: 1; color: var(--telha); }
+  strong { font: 600 18px/1.3 var(--sans); }
+  .d { font: 400 15px/1.5 var(--sans); color: var(--texto); }
+</style>

@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecalho from '../components/Cabecalho.astro';
+import Hero from '../components/Hero.astro';
+import Prova from '../components/Prova.astro';
+import Orla from '../components/Orla.astro';
+import Flats from '../components/Flats.astro';
+import Transfer from '../components/Transfer.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Reservar from '../components/Reservar.astro';
+import Perguntas from '../components/Perguntas.astro';
+import Rodape from '../components/Rodape.astro';
+import BarraMobile from '../components/BarraMobile.astro';
+---
+<Base
+  titulo="Diego's Hospedagens · Flats beira-mar na Av. Litorânea, São Luís – MA"
+  descricao="Dois flats de frente para a orla de São Luís, com piscina, garagem e pets bem-vindos. Transfer particular para Barreirinhas, Santo Amaro, Tutóia e Parnaíba. Consulte datas pelo WhatsApp."
+>
+  <Cabecalho />
+  <main id="conteudo">
+    <Hero />
+    <Prova />
+    <Orla />
+    <Flats />
+    <Transfer />
+    <Depoimentos />
+    <Reservar />
+    <Perguntas />
+  </main>
+  <Rodape />
+  <BarraMobile />
+</Base>
